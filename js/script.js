@@ -101,21 +101,63 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // simple-blockers.js
-(function(){
-  // disable right-click context menu
-  window.addEventListener('contextmenu', function(e){
-    e.preventDefault();
-  });
+// (function () {
+//     // disable right-click context menu
+//     window.addEventListener('contextmenu', function (e) {
+//         e.preventDefault();
+//     });
 
-  // block common devtools key combos: F12, Ctrl+Shift+I/J/C, Ctrl+U
-  window.addEventListener('keydown', function(e){
-    if (
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-      (e.ctrlKey && e.key === 'U')
-    ){
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  });
-})();
+//     // block common devtools key combos: F12, Ctrl+Shift+I/J/C, Ctrl+U
+//     window.addEventListener('keydown', function (e) {
+//         if (
+//             e.key === 'F12' ||
+//             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+//             (e.ctrlKey && e.key === 'U')
+//         ) {
+//             e.preventDefault();
+//             e.stopPropagation();
+//         }
+//     });
+// })();
+
+
+// Simple animation for stats counter
+
+
+ document.addEventListener('DOMContentLoaded', function () {
+    const statNumbers = document.querySelectorAll('.stat-number');
+
+    statNumbers.forEach(stat => {
+        const target = parseInt(stat.textContent);
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                stat.textContent = target + (stat.textContent.includes('+') ? '+' : '');
+                clearInterval(timer);
+            } else {
+                stat.textContent = Math.floor(current) + (stat.textContent.includes('+') ? '+' : '');
+            }
+        }, 30);
+    });
+
+    // Animation for feature items
+    const featureItems = document.querySelectorAll('.feature-item');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateX(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    featureItems.forEach(item => {
+        item.style.opacity = 0;
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(item);
+    });
+});
